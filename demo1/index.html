@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人所得税计算</title>
+</head>
+<body>
+<h1>个人所得税计算</h1>
+<form id="taxForm">
+    <label for="income">收入:</label>
+    <input type="number" id="income" name="income" required>
+    <button type="submit">计算税款</button>
+</form>
+<div id="result"></div>
+
+<script>
+    document.getElementById('taxForm').onsubmit = function(event) {
+        event.preventDefault();
+        var income = document.getElementById('income').value;
+
+        fetch('/api/tax/calculate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ income: income })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = '计算的税款: ' + data.taxAmount;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+</script>
+</body>
+</html>

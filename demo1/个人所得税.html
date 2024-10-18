@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>个人所得税计算</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<h1>个人所得税计算</h1>
+<form id="taxForm">
+  <label for="income">收入:</label>
+  <input type="number" id="income" name="income" required>
+  <button type="submit">计算税款</button>
+</form>
+<div id="result"></div>
+
+<script>
+  document.getElementById('taxForm').onsubmit = function(event) {
+    event.preventDefault();
+    var income = document.getElementById('income').value;
+    calculateTax(income);
+  };
+
+  function calculateTax(income) {
+    let taxRate = 0;
+    let taxAmount = 0;
+    let netIncome = 0;
+
+    if (income <= 5000) {
+      taxRate = 0.0;
+    } else if (income <= 8000) {
+      taxRate = 0.03;
+      taxAmount = (income - 5000) * taxRate;
+    } else if (income <= 17000) {
+      taxRate = 0.1;
+      taxAmount = 300 + (income - 8000) * taxRate;
+    } else if (income <= 30000) {
+      taxRate = 0.2;
+      taxAmount = 1700 + (income - 17000) * taxRate;
+    }
+    // 可以根据需要继续添加更多的税率区间
+
+    netIncome = income - taxAmount;
+
+    displayResult(income, taxRate, taxAmount, netIncome);
+  }
+
+  function displayResult(income, taxRate, taxAmount, netIncome) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = `
+            <p>工资: ${income}</p>
+            <p>税率: ${taxRate * 100}%</p>
+            <p>税额: ${taxAmount.toFixed(2)}</p>
+            <p>净收入: ${netIncome.toFixed(2)}</p>
+        `;
+  }
+</script>
+</body>
+</html>
